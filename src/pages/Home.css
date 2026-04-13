@@ -1,0 +1,662 @@
+/* ════════════════════════════════════════════════════
+   HOME PAGE CSS — Secret Techs
+   ════════════════════════════════════════════════════
+
+   SECTION MAP:
+   1.  Hero wrapper & background
+   2.  "Welcome to" character animation
+   3.  "Secret Techs" pixel-stamp animation
+   4.  Vertical scroll hint line
+   5.  Buttons (.btn-primary, .btn-ghost)
+   6.  Shared section styles
+   7.  About section & floating cards
+   8.  Contact section & form
+   9.  Responsive overrides (tablet ≤900px, mobile ≤640px)
+
+   SIZE GUIDE (quick reference):
+   • "Welcome to" desktop  → .hello-wrap font-size (line ~116)
+   • "Welcome to" mobile   → @media 640px .hello-wrap (line ~590)
+   • "Secret Techs" desktop → .brand-name font-size (line ~168)
+   • "Secret Techs" mobile  → @media 640px .brand-name (line ~600)
+   • Section headings       → .section-title font-size (line ~320)
+   • Body paragraphs        → .section-body font-size (line ~330)
+   ════════════════════════════════════════════════════ */
+
+
+/* ═══════════════════════════════════════════
+   1. HERO SECTION WRAPPER & BACKGROUND
+   ═══════════════════════════════════════════ */
+.home { min-height: 100vh; }
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding-top: 70px;  /* accounts for fixed header height */
+}
+
+/* Background container — holds all orbs + grid */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Glowing blobs — purely decorative background color */
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  animation: drift 8s ease-in-out infinite alternate;
+}
+
+/* Gold orb — top-left */
+/* ↓ Change rgba() color or width/height to resize/recolor ↓ */
+.orb-gold {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(200,150,30,0.22) 0%, transparent 70%);
+  top: -100px; left: -100px;
+  animation-delay: 0s;
+}
+
+/* Teal orb — bottom-right */
+.orb-teal {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(26,107,107,0.18) 0%, transparent 70%);
+  bottom: 0; right: -50px;
+  animation-delay: -3s;
+}
+
+/* Crimson orb — center-right */
+.orb-crimson {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(139,26,26,0.12) 0%, transparent 70%);
+  top: 40%; left: 60%;
+  animation-delay: -5s;
+}
+
+@keyframes drift {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(30px, 20px) scale(1.05); }
+}
+
+/* Subtle gold crosshatch grid overlay */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(200,150,30,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200,150,30,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+}
+
+/* Hero content wrapper — sits above background */
+.hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 0 1rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+/* ═══════════════════════════════════════════
+   2. "WELCOME TO" — APPLE HELLO ANIMATION
+   ═══════════════════════════════════════════
+
+   Each character flies up from below with a spring
+   bounce and rotates into place, one by one.
+
+   TO RESIZE "Welcome to":
+   Change font-size: clamp(MIN, VIEWPORT, MAX)
+   • MIN   = size on phones
+   • VIEWPORT = scales with screen width (use vw units)
+   • MAX   = size on large desktops
+   ═══════════════════════════════════════════ */
+.hello-wrap {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0;
+  font-family: var(--font-heading);
+
+  /* ↓↓ ADJUST "Welcome to" SIZE (DESKTOP) HERE ↓↓ */
+  font-size: clamp(1.4rem, 3.5vw, 2.6rem);
+  /* ↑ phone min  ↑ scales with viewport  ↑ desktop max */
+
+  font-weight: 300;
+  color: var(--text-secondary);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.6rem;
+  min-height: 2rem;
+}
+
+/* Each letter is hidden then animated in */
+.hello-char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(30px) rotateX(90deg);
+  animation: none;
+}
+
+.hello-wrap.visible .hello-char {
+  animation: charIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Spring-bounce letter-by-letter animation */
+@keyframes charIn {
+  0%   { opacity: 0; transform: translateY(30px) rotateX(90deg) scale(0.8); }
+  60%  { opacity: 1; transform: translateY(-4px) rotateX(-5deg) scale(1.02); }
+  100% { opacity: 1; transform: translateY(0) rotateX(0deg) scale(1); }
+}
+
+
+/* ═══════════════════════════════════════════
+   3. "SECRET TECHS" — PIXEL STAMP ANIMATION
+   ═══════════════════════════════════════════
+
+   Each word is a <span class="brand-word">.
+   The animation is a PIXEL STAMP — the word
+   starts oversized, blurred, semi-transparent,
+   and slams down to crisp full size like a stamp.
+   This matches the blocky pixel-art Jacquarda font.
+
+   "Secret" stamps in first, then "Techs" stamps in
+   slightly after, with a subtle horizontal slide.
+
+   TO RESIZE "Secret Techs":
+   Change font-size on .brand-name (desktop)
+   and override in @media 640px (mobile).
+   ═══════════════════════════════════════════ */
+.brand-name {
+  font-family: var(--font-brand);
+  font-weight: 400;
+
+  /* ↓↓ ADJUST "Secret Techs" SIZE (DESKTOP) HERE ↓↓ */
+  font-size: clamp(3.5rem, 14vw, 13rem);
+  /* ↑ phone min  ↑ scales with viewport  ↑ desktop max */
+
+  line-height: 0.9;
+  width: 100%;
+  white-space: nowrap;     /* keeps "Secret Techs" on ONE LINE on desktop */
+
+  padding-bottom: 0.12em;  /* prevents gradient clipping at descenders */
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.25em;             /* space between "Secret" and "Techs" words */
+  flex-wrap: nowrap;       /* enforce one line on desktop */
+}
+
+/* Each word stamps in independently.
+   Gradient is applied HERE (not on parent) so background-clip: text works
+   correctly — filter/opacity on child spans breaks parent gradient clip. */
+.brand-word {
+  display: inline-block;
+  opacity: 0;
+
+  /* Gold → Amber → Crimson gradient applied per-word */
+  background: linear-gradient(
+    135deg,
+    var(--accent-gold)    0%,
+    var(--accent-amber)   45%,
+    var(--accent-crimson) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  /* Stamp animation — uses only transform+opacity, NO filter/blur
+     because filter creates a new stacking context that breaks
+     -webkit-background-clip: text on the gradient */
+  transform: scale(1.18) translateY(-14px);
+  animation: pixelStamp 0.6s cubic-bezier(0.22, 1.1, 0.36, 1) both;
+}
+
+/* PIXEL STAMP keyframes — no filter (would break gradient text clip)
+   Words slam down from above with a scale overshoot, like a rubber stamp */
+@keyframes pixelStamp {
+  0% {
+    opacity: 0;
+    transform: scale(1.3) translateY(-20px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(0.96) translateY(3px);   /* slight overshoot down */
+  }
+  80% {
+    transform: scale(1.02) translateY(-1px);  /* tiny rebound up */
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Drop shadow glow under the brand name — animates in after stamp */
+.brand-name-glow {
+  width: 60%;
+  max-width: 500px;
+  height: 20px;
+  margin: -6px auto 0;
+  background: radial-gradient(ellipse, rgba(200,150,30,0.25) 0%, transparent 70%);
+  filter: blur(8px);
+  animation: glowFadeIn 0.6s ease 1.6s both;
+  pointer-events: none;
+}
+
+@keyframes glowFadeIn {
+  from { opacity: 0; transform: scaleX(0.5); }
+  to   { opacity: 1; transform: scaleX(1); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ═══════════════════════════════════════════
+   4. VERTICAL SCROLL HINT LINE
+   ═══════════════════════════════════════════
+
+   A short animated line at the bottom of the hero,
+   hinting to the user to scroll down.
+   It scales its height automatically via CSS.
+
+   TO CHANGE POSITION: adjust `bottom` value.
+   TO CHANGE LENGTH:   adjust `height` on the span.
+   ═══════════════════════════════════════════ */
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 2.5rem;          /* ← distance from hero bottom edge */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.hero-scroll-hint span {
+  display: block;
+  width: 2px;
+  height: clamp(32px, 5vh, 56px);   /* ← responsive height — scales with viewport */
+  background: linear-gradient(to bottom, var(--accent-gold), transparent);
+  margin: 0 auto;
+  border-radius: 2px;
+  animation: scrollLine 2.4s ease-in-out infinite;
+}
+
+@keyframes scrollLine {
+  0%   { opacity: 0; transform: scaleY(0);   transform-origin: top; }
+  25%  { opacity: 1; transform: scaleY(1);   transform-origin: top; }
+  75%  { opacity: 1; transform: scaleY(1);   transform-origin: top; }
+  100% { opacity: 0; transform: scaleY(0.1); transform-origin: bottom; }
+}
+
+
+/* ═══════════════════════════════════════════
+   5. BUTTONS
+   ═══════════════════════════════════════════
+
+   .btn-primary = filled gold pill button
+   .btn-ghost   = outlined transparent button
+
+   TO RESIZE: change padding and font-size below.
+   TO RECOLOR: change the gradient colors in background.
+   ═══════════════════════════════════════════ */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, var(--accent-gold), var(--accent-amber));
+  color: #fff;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;        /* ← button text size */
+  letter-spacing: 0.08em;
+  padding: 0.9rem 2.2rem;    /* ← button height × width */
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 20px rgba(200,150,30,0.35);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(200,150,30,0.55);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  padding: 0.9rem 2.2rem;
+  border-radius: 50px;
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  background: var(--surface);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, transform 0.2s;
+}
+
+.btn-ghost:hover {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+  transform: translateY(-2px);
+}
+
+
+/* ═══════════════════════════════════════════
+   6. SHARED SECTION STYLES
+   ═══════════════════════════════════════════
+
+   .section-eyebrow = small uppercase label (e.g. "WHO WE ARE")
+   .section-title   = large section heading
+   .section-body    = paragraph text
+   ═══════════════════════════════════════════ */
+.section {
+  padding: 8rem 0;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.section.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.section-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Small uppercase label above headings */
+.section-eyebrow {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;          /* ← eyebrow label size */
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  margin-bottom: 0.75rem;
+}
+
+/* Main section heading */
+.section-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 3.2rem); /* ← section heading size */
+  font-weight: 300;
+  line-height: 1.2;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+}
+
+/* Body paragraph text */
+.section-body {
+  font-family: var(--font-body);
+  font-size: 1.3rem;           /* ← body paragraph size */
+  color: var(--text-secondary);
+  line-height: 1.85;
+  margin-bottom: 1rem;
+  max-width: 560px;
+}
+
+
+/* ═══════════════════════════════════════════
+   7. ABOUT SECTION & FLOATING CARDS
+   ═══════════════════════════════════════════
+
+   Two-column layout on desktop:
+   LEFT  = text + Explore Products button
+   RIGHT = three floating animated cards
+
+   Cards use absolute positioning on desktop for the
+   overlapping staggered look. On mobile they become
+   a simple flex row or column (see section 9).
+   ═══════════════════════════════════════════ */
+.about-section { background: var(--bg); }
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+
+.about-text .btn-primary { margin-top: 1.5rem; }
+
+/* Right column: card container */
+.about-visual {
+  position: relative;
+  height: 380px;
+}
+
+/* Individual floating card */
+.about-card {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.25rem 1.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.3s;
+  min-width: 130px;
+}
+
+.about-card:hover {
+  box-shadow: 0 16px 48px rgba(0,0,0,0.18);
+}
+
+.card-icon { font-size: 2rem; }
+
+.card-label {
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* Card positions + float animations
+   ↓ Change top/left/right/bottom % to reposition cards ↓ */
+.card1 { top: 8%;  left: 5%;   animation: float 4s ease-in-out infinite; }
+.card2 { top: 42%; right: 4%;  animation: float 4s ease-in-out infinite 1.3s; }
+.card3 { bottom: 8%; left: 28%; animation: float 4s ease-in-out infinite 2.6s; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-12px); }
+}
+
+/* Background glow behind cards */
+.about-orb {
+  position: absolute;
+  width: 280px; height: 280px;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(200,150,30,0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(30px);
+  pointer-events: none;
+}
+
+
+/* ═══════════════════════════════════════════
+   8. CONTACT SECTION & FORM
+   ═══════════════════════════════════════════
+
+   TO CONNECT THE FORM to a real email service:
+   Edit handleSubmit() in Home.js.
+   ═══════════════════════════════════════════ */
+.contact-section {
+  background: var(--bg-secondary);
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-section .section-title { margin-bottom: 2.5rem; }
+
+.contact-form {
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+
+.form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+
+.form-group label {
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.form-group input,
+.form-group textarea {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  transition: border-color var(--transition), box-shadow var(--transition);
+  outline: none;
+  resize: none;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder { color: var(--text-muted); }
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 0 3px rgba(200,150,30,0.12);
+}
+
+/* Success message after form submit */
+.contact-thanks {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  color: var(--accent-gold);
+  padding: 2rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  max-width: 420px;
+}
+
+.contact-thanks span { font-size: 1.5rem; }
+
+/* Decorative orb behind the form */
+.contact-orb {
+  position: absolute;
+  width: 400px; height: 400px;
+  right: -100px; bottom: -100px;
+  background: radial-gradient(circle, rgba(26,107,107,0.10) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(60px);
+  pointer-events: none;
+}
+
+
+/* ═══════════════════════════════════════════
+   9. RESPONSIVE OVERRIDES
+   ═══════════════════════════════════════════ */
+
+/* ── TABLET (≤ 900px) ── */
+@media (max-width: 900px) {
+  /* Stack about section into single column */
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  /* Cards become a horizontal flex row */
+  .about-visual {
+    height: auto;
+    position: static;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 1rem 0;
+  }
+
+  .about-card {
+    position: static;   /* disable absolute positioning */
+    animation: none;    /* disable float — prevents overlap */
+    flex: 0 0 auto;
+    min-width: 120px;
+  }
+
+  .about-orb { display: none; }
+}
+
+/* ── MOBILE (≤ 640px) ── */
+@media (max-width: 640px) {
+  .section { padding: 4rem 0; }
+  .form-row { grid-template-columns: 1fr; }
+
+  /* "Welcome to" on phones
+     ↓ CHANGE THESE to resize on mobile ↓ */
+  .hello-wrap {
+    font-size: clamp(1.2rem, 6vw, 1.8rem);
+    margin-bottom: 0.4rem;
+  }
+
+  /* "Secret Techs" on phones
+     ↓ CHANGE clamp values to resize on mobile ↓
+     white-space: normal → allows "Techs" below "Secret"
+     width: 100% → fills the phone screen width */
+  .brand-name {
+    font-size: clamp(4.5rem, 22vw, 7rem);
+    /* ↑ min  ↑ responsive  ↑ cap — increase MIN to make it bigger */
+    white-space: normal;
+    flex-wrap: wrap;
+    line-height: 1;
+    gap: 0.15em;
+    justify-content: center;
+  }
+
+  /* Glow ellipse under brand on mobile */
+  .brand-name-glow {
+    width: 80%;
+  }
+
+  /* Cards stack vertically on small phones */
+  .about-visual {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .about-card {
+    width: 80%;
+    max-width: 240px;
+  }
+}
