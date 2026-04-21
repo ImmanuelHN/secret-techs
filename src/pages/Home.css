@@ -660,3 +660,257 @@
     max-width: 240px;
   }
 }
+
+/* ═══════════════════════════════════════════
+   10. TIP JAR SECTION (Optimized Readability & Alignment)
+   ═══════════════════════════════════════════ */
+.tip-jar-section {
+  background: var(--bg);
+  padding: 140px 5% 100px;
+  overflow: hidden;
+  transition: background var(--transition);
+}
+
+.tip-jar-content-wrapper {
+  max-width: 1300px;
+  margin: 0 auto;
+  display: flex;
+  gap: 80px;
+  align-items: flex-start;
+  text-align: left;
+}
+
+/* Left Column Styling */
+.tip-jar-info {
+  flex: 0 0 380px;
+  display: flex;
+  flex-direction: column;
+}
+
+.tip-jar-info .section-eyebrow {
+  margin-bottom: 24px;
+}
+
+.tip-jar-info .section-title {
+  font-size: clamp(2.5rem, 4vw, 3.2rem);
+  line-height: 1.25;
+  margin-bottom: 0;
+}
+
+.tip-jar-subtitle {
+  color: var(--accent-gold);
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  margin-top: 32px;
+  font-weight: 300;
+}
+
+.tip-jar-compact-muted {
+  color: var(--text-muted);
+  font-size: 1.25rem; /* Increased for readability */
+  margin-top: 16px;
+  font-family: var(--font-body);
+  line-height: 1.5;
+}
+
+.lottie-container-compact {
+  margin-top: 50px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* Right Column Styling */
+.tip-jar-actions {
+  flex: 1;
+}
+
+.payment-cards-horizontal {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+}
+
+.payment-card.compact {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 45px 32px; /* Increased internal padding */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+  min-height: 440px; /* Standardize height so buttons align horizontally */
+}
+
+.payment-card.compact:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 32px rgba(245, 166, 35, 0.12);
+}
+
+.card-tag {
+  color: var(--accent-gold);
+  font-size: 13px; /* Increased for readability */
+  font-weight: bold;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.payment-card.compact h4 {
+  font-family: var(--font-heading);
+  font-size: 1.8rem; /* Increased slightly */
+  margin-bottom: 10px;
+  color: var(--text-primary);
+  font-weight: 300;
+}
+
+.card-desc-compact {
+  font-size: 15px; /* Increased for readability */
+  margin-bottom: 30px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  min-height: 3.2rem; /* Consistent space for descriptions */
+}
+
+.payment-card.compact .btn-primary {
+  width: 100%;
+  max-width: 280px; /* Centered narrow pill */
+  padding: 0.95rem 1.2rem;
+  font-size: 1rem; /* Increased */
+  margin-top: auto; /* Push down to align horizontally between cards */
+}
+
+.card-footer-compact {
+  font-size: 13px; /* Increased readability */
+  margin-top: 28px;
+  color: var(--text-muted);
+  opacity: 0.8;
+}
+
+/* UPI Specific Adjustments */
+.qr-button-container {
+  margin-top: auto; /* Push to bottom to align with the other card's button */
+  margin-bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.upi-copy-pill {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  padding: 10px 20px; /* Increased */
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.upi-copy-pill code {
+  font-size: 14px; /* Increased readability */
+  font-weight: 300;
+  color: var(--text-primary);
+  font-family: inherit;
+}
+
+/* Footer Global Note */
+.tip-jar-footer-note-compact {
+  color: var(--text-muted);
+  font-size: 14px; /* Increased readability */
+  margin-top: 45px;
+  text-align: center;
+  opacity: 0.7;
+  width: 100%;
+}
+
+/* ─────────────────────────────────────────────────────
+   QR MODAL STYLE
+   ───────────────────────────────────────────────────── */
+.qr-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  animation: fadeIn 0.2s ease forwards;
+}
+
+.qr-modal-content {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 45px 35px;
+  border-radius: 20px;
+  position: relative;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+}
+
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 2.2rem;
+  cursor: pointer;
+  line-height:1;
+}
+
+.modal-title {
+  font-family: var(--font-heading);
+  color: var(--text-primary);
+  font-size: 1.6rem;
+  margin-bottom: 24px;
+}
+
+.modal-qr-wrap {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.modal-qr-wrap img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.modal-footer {
+  color: var(--accent-gold);
+  font-family: monospace;
+  font-size: 12px;
+}
+
+/* Responsive Overrides */
+@media (max-width: 1150px) {
+  .tip-jar-content-wrapper {
+    flex-direction: column;
+    text-align: center;
+    gap: 40px;
+  }
+  .tip-jar-info { flex: auto; align-items: center; width: 100%; max-width: 500px; margin: 0 auto; }
+  .lottie-container-compact { justify-content: center; }
+  .payment-cards-horizontal { width: 100%; flex-wrap: wrap; justify-content: center; margin-bottom: 40px; }
+  .payment-card.compact { flex: 0 1 400px; min-width: 300px; min-height: auto; }
+}
+
+@media (max-width: 640px) {
+  .tip-jar-section { padding: 80px 5% 60px; }
+  .payment-cards-horizontal { flex-direction: column; align-items: center; }
+  .payment-card.compact { width: 100%; min-width: 0; }
+  .tip-jar-subtitle { font-size: 1.4rem; }
+}

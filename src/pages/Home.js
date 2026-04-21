@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import upiQR from '../assets/upi-ur.jpeg';
 import Footer from '../components/Footer';
 import './Home.css';
 
@@ -221,6 +223,110 @@ function ContactSection() {
 }
 
 /* ─────────────────────────────────────────────────────
+   TIP JAR SECTION
+   "Drop a coin in the jar" — digital contribution section.
+   Includes Ko-fi for international and UPI for India.
+   ───────────────────────────────────────────────────── */
+function TipJarSection() {
+  const [ref, vis] = useReveal();
+  const [copied, setCopied] = useState(false);
+  const [showQR, setShowQR] = useState(false);
+
+  const copyUPI = () => {
+    navigator.clipboard.writeText('immanuel052002-1@okhdfcbank');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <section id="tipjar" className={`section tip-jar-section ${vis ? 'revealed' : ''}`} ref={ref}>
+      <div className="section-inner tip-jar-content-wrapper">
+        
+        {/* Left Column: Wording & Animation (More compact) */}
+        <div className="tip-jar-info">
+          <p className="section-eyebrow">SUPPORT ME</p>
+          <h2 className="section-title">Enjoyed what<br />I built?</h2>
+          <h3 className="tip-jar-subtitle">Drop a coin in the jar 🪙</h3>
+          <p className="tip-jar-compact-muted">
+            Every contribution keeps the studio alive and building.
+          </p>
+
+          <div className="lottie-container-compact">
+            <DotLottieReact 
+              src="/pink pig coin save.lottie" 
+              loop 
+              autoplay 
+              style={{ width: 220, height: 220 }} 
+            />
+          </div>
+        </div>
+
+        {/* Right Column: Payment Cards (Horizontal) */}
+        <div className="tip-jar-actions">
+          <div className="payment-cards-horizontal">
+            {/* Card 1: International */}
+            <div className="payment-card compact">
+              <span className="card-tag">WORLDWIDE</span>
+              <h4>Support via Ko-fi</h4>
+              <p className="card-desc-compact">International cards & PayPal accepted</p>
+              <a 
+                href="https://ko-fi.com/secrettechs" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="btn-primary"
+              >
+                Click to drop the coin ☕
+              </a>
+              <span className="card-footer-compact">Powered by Ko-fi</span>
+            </div>
+
+            {/* Card 2: India / UPI */}
+            <div className="payment-card compact">
+              <span className="card-tag">INDIA</span>
+              <h4>Pay via UPI</h4>
+              <p className="card-desc-compact">Scan with GPay, PhonePe or any UPI app</p>
+              
+              <div className="qr-button-container">
+                <button className="btn-primary qr-trigger" onClick={() => setShowQR(true)}>
+                  View QR 📱
+                </button>
+              </div>
+
+              <div className="upi-copy-pill" onClick={copyUPI}>
+                <code>immanuel052002-1@...</code>
+                <span className="copy-icon">{copied ? '✓' : '📋'}</span>
+                {copied && <span className="copy-tooltip">Copied! ✓</span>}
+              </div>
+              
+              <span className="card-footer-compact">₹ · Instant transfer</span>
+            </div>
+          </div>
+
+          <p className="tip-jar-footer-note-compact">
+            🔒 All transactions are secure and go directly to the creator.
+          </p>
+        </div>
+
+      </div>
+
+      {/* QR MODAL POPUP */}
+      {showQR && (
+        <div className="qr-modal-overlay" onClick={() => setShowQR(false)}>
+          <div className="qr-modal-content" onClick={e => e.stopPropagation()}>
+            <button className="modal-close" onClick={() => setShowQR(false)}>×</button>
+            <h4 className="modal-title">Scan to Support</h4>
+            <div className="modal-qr-wrap">
+              <img src={upiQR} alt="UPI QR Code" />
+            </div>
+            <p className="modal-footer">immanuel052002-1@okhdfcbank</p>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────────────
    MAIN HOME PAGE
    ───────────────────────────────────────────────────── */
 export default function Home() {
@@ -252,6 +358,7 @@ export default function Home() {
 
       <AboutSection />
       <ContactSection />
+      <TipJarSection />
       <Footer />
     </main>
   );
