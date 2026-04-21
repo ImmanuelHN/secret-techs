@@ -19,7 +19,7 @@ export default function Header({ theme, toggleTheme }) {
     { label: 'About', href: '/#about' },
     { label: 'Products', href: '/products' },
     { label: 'Contact', href: '/#contact' },
-    { label: 'Donate', href: '/#tipjar' },
+    { label: 'Donate', href: '/donate' },
   ];
 
   const handleNavClick = (href) => {
