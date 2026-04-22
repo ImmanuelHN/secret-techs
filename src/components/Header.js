@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Header.css';
 
 export default function Header({ theme, toggleTheme }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -16,6 +17,7 @@ export default function Header({ theme, toggleTheme }) {
   useEffect(() => { setMenuOpen(false); }, [location]);
 
   const navLinks = [
+    { label: 'Home', href: '/' },
     { label: 'About', href: '/#about' },
     { label: 'Products', href: '/products' },
     { label: 'Contact', href: '/#contact' },
@@ -24,10 +26,19 @@ export default function Header({ theme, toggleTheme }) {
 
   const handleNavClick = (href) => {
     setMenuOpen(false);
+    if (href === '/') {
+      if (location.pathname === '/') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        navigate('/');
+      }
+      return;
+    }
+
     if (href.startsWith('/#')) {
       const id = href.replace('/#', '');
       if (location.pathname !== '/') {
-        window.location.href = href;
+        navigate(href); // Navigate to Home with hash
       } else {
         document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
       }
@@ -45,8 +56,8 @@ export default function Header({ theme, toggleTheme }) {
         {/* Desktop Nav */}
         <nav className="nav-desktop">
           {navLinks.map(link =>
-            link.href.startsWith('/#') ? (
-              <button key={link.label} className="nav-link" onClick={() => handleNavClick(link.href)}>
+            link.href.startsWith('/#') || link.href === '/' ? (
+              <button key={link.label} className={`nav-link ${location.pathname === link.href ? 'active' : ''}`} onClick={() => handleNavClick(link.href)}>
                 {link.label}
               </button>
             ) : (
@@ -88,7 +99,7 @@ export default function Header({ theme, toggleTheme }) {
       {/* Mobile Drawer */}
       <nav className={`nav-mobile ${menuOpen ? 'open' : ''}`}>
         {navLinks.map(link =>
-          link.href.startsWith('/#') ? (
+          link.href.startsWith('/#') || link.href === '/' ? (
             <button key={link.label} className="nav-link-mobile" onClick={() => handleNavClick(link.href)}>
               {link.label}
             </button>
